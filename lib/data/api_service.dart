@@ -9,7 +9,7 @@ class ApiService {
 
   Future<ApiResponse> turnOnContactAndEngine() async {
     try {
-      Uri url = Uri.parse(baseUrl + "onetouch");
+      Uri url = Uri.parse(baseUrl + "/onetouch");
 
       http.Response response = await http.get(url);
 
