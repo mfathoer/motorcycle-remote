@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motorcycle_remote/data/api_service.dart';
 import 'package:motorcycle_remote/main_bloc_observer.dart';
 
 import 'presentation/bloc/contact_bloc.dart';
@@ -13,6 +14,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  final ApiService _apiService = ApiService();
+
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Theme.of(context).primaryColor;
@@ -24,13 +27,14 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiBlocProvider(providers: [
         BlocProvider<ContactBloc>(
-            create: (BuildContext context) =>
-                ContactBloc(initialState: primaryColor)),
+            create: (BuildContext context) => ContactBloc(
+                initialState: primaryColor, apiService: _apiService)),
         BlocProvider<StarterBloc>(
-            create: (BuildContext context) => StarterBloc()),
-        BlocProvider<EmergencyBloc>(
             create: (BuildContext context) =>
-                EmergencyBloc(initialState: primaryColor))
+                StarterBloc(apiService: _apiService)),
+        BlocProvider<EmergencyBloc>(
+            create: (BuildContext context) => EmergencyBloc(
+                initialState: primaryColor, apiService: _apiService))
       ], child: HomePage()),
     );
   }

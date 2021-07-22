@@ -1,16 +1,34 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:motorcycle_remote/data/responses/api_result.dart';
+import '../../data/api_service.dart';
+import '../../data/responses/api_response.dart';
 
 enum EmergencyModeEvent { EMERGENCY_MODE_ON, EMERGENCY_MODE_OFF }
 
 class EmergencyBloc extends Bloc<EmergencyModeEvent, Color> {
   final Color initialState;
-  EmergencyBloc({required this.initialState}) : super(initialState);
+  final ApiService apiService;
+
+  EmergencyBloc({required this.initialState, required this.apiService})
+      : super(initialState);
 
   @override
   Stream<Color> mapEventToState(EmergencyModeEvent event) async* {
-    yield (event == EmergencyModeEvent.EMERGENCY_MODE_OFF)
-        ? initialState
-        : Colors.yellow;
+    if (event == EmergencyModeEvent.EMERGENCY_MODE_OFF) {
+      ApiResponse response = await apiService.turnOnEmergencyMode();
+      if (response.status == ApiResult.succeed) {
+        yield Colors.yellow;
+      } else {
+        yield initialState;
+      }
+    } else {
+      ApiResponse response = await apiService.turnOffEmergencyMode();
+      if (response.status == ApiResult.succeed) {
+        yield initialState;
+      } else {
+        yield Colors.yellow;
+      }
+    }
   }
 }
