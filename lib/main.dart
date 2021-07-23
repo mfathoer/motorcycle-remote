@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:motorcycle_remote/data/api_service.dart';
-import 'package:motorcycle_remote/main_bloc_observer.dart';
 
+import 'main_bloc_observer.dart';
 import 'presentation/bloc/contact_bloc.dart';
 import 'presentation/bloc/emergency_bloc.dart';
 import 'presentation/bloc/starter_bloc.dart';
 import 'presentation/view/home_page.dart';
+import '../../data/api_service.dart';
 
 void main() {
   Bloc.observer = MainBlocObserver();

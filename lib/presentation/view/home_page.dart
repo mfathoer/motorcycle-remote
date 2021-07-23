@@ -21,10 +21,8 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       if (engineStateColor == Colors.green) {
                         _starterBloc.add(StarterEvent.ENGINE_ON);
-                        _contactBloc.add(ContactEvent.CONTACT_ON);
                       } else {
                         _starterBloc.add(StarterEvent.ENGINE_OFF);
-                        _contactBloc.add(ContactEvent.CONTACT_OFF);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -35,7 +33,9 @@ class HomePage extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(shape: BoxShape.circle),
                       child: Text(
-                        "START\nENGINE",
+                        (engineStateColor == Colors.green)
+                            ? "START\nENGINE"
+                            : "STOP\nENGINE",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 24),
                       ),
@@ -51,7 +51,7 @@ class HomePage extends StatelessWidget {
                         _contactBloc.add(ContactEvent.CONTACT_ON);
                       } else {
                         _contactBloc.add(ContactEvent.CONTACT_OFF);
-                        _starterBloc.add(StarterEvent.ENGINE_OFF);
+                        // _starterBloc.add(StarterEvent.ENGINE_OFF);
                       }
                     },
                     style: ElevatedButton.styleFrom(primary: contactStateColor),
@@ -59,7 +59,9 @@ class HomePage extends StatelessWidget {
                         width: 128,
                         height: 40,
                         alignment: Alignment.center,
-                        child: Text("PRE-START"))),
+                        child: Text((contactStateColor == Colors.blue)
+                            ? "PRE-START"
+                            : "SHUT DOWN"))),
               ),
               SizedBox(
                 width: 24,
@@ -81,7 +83,9 @@ class HomePage extends StatelessWidget {
                         width: 128,
                         height: 40,
                         alignment: Alignment.center,
-                        child: Text("EMERGENCY MODE"))),
+                        child: Text((emergencyStateColor == Colors.blue)
+                            ? "EMERGENCY MODE"
+                            : "TURN OFF"))),
               )
             ],
           ),

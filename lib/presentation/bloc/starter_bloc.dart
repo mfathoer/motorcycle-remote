@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:motorcycle_remote/data/responses/api_result.dart';
+import '../../data/responses/api_result.dart';
 import '../../data/api_service.dart';
 import '../../data/responses/api_response.dart';
 
@@ -14,15 +14,15 @@ class StarterBloc extends Bloc<StarterEvent, Color> {
   @override
   Stream<Color> mapEventToState(StarterEvent event) async* {
     if (event == StarterEvent.ENGINE_OFF) {
-      ApiResponse response = await apiService.turnOffEngine();
-      if (response.status == ApiResult.succeed) {
+      ApiResponse? response = await apiService.turnOffEngine();
+      if (response?.status == ApiResult.success) {
         yield Colors.green;
       } else {
         yield Colors.red;
       }
     } else {
-      ApiResponse response = await apiService.turnOnEngine();
-      if (response.status == ApiResult.succeed) {
+      ApiResponse? response = await apiService.turnOnEngine();
+      if (response?.status == ApiResult.success) {
         yield Colors.red;
       } else {
         yield Colors.green;

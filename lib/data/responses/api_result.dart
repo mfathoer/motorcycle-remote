@@ -1,4 +1,4 @@
 class ApiResult {
-  static final String succeed = "success";
+  static final String success = "success";
   static final String failed = "failed";
 }

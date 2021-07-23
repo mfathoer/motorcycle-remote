@@ -15,19 +15,19 @@ class EmergencyBloc extends Bloc<EmergencyModeEvent, Color> {
 
   @override
   Stream<Color> mapEventToState(EmergencyModeEvent event) async* {
-    if (event == EmergencyModeEvent.EMERGENCY_MODE_OFF) {
-      ApiResponse response = await apiService.turnOnEmergencyMode();
-      if (response.status == ApiResult.succeed) {
-        yield Colors.yellow;
+    if (event == EmergencyModeEvent.EMERGENCY_MODE_ON) {
+      ApiResponse? response = await apiService.turnOnEmergencyMode();
+      if (response?.status == ApiResult.success) {
+        yield Colors.red;
       } else {
         yield initialState;
       }
     } else {
-      ApiResponse response = await apiService.turnOffEmergencyMode();
-      if (response.status == ApiResult.succeed) {
+      ApiResponse? response = await apiService.turnOffEmergencyMode();
+      if (response?.status == ApiResult.success) {
         yield initialState;
       } else {
-        yield Colors.yellow;
+        yield Colors.red;
       }
     }
   }
