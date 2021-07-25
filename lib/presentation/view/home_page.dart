@@ -27,8 +27,10 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       if (engineStateColor == Colors.green) {
                         _starterBloc.add(StarterEvent.ENGINE_ON);
+                        _contactBloc.add(ContactEvent.CONTACT_ON);
                       } else {
                         _starterBloc.add(StarterEvent.ENGINE_OFF);
+                        _contactBloc.add(ContactEvent.CONTACT_OFF);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -57,6 +59,7 @@ class HomePage extends StatelessWidget {
                         _contactBloc.add(ContactEvent.CONTACT_ON);
                       } else {
                         _contactBloc.add(ContactEvent.CONTACT_OFF);
+                        _starterBloc.add(StarterEvent.ENGINE_OFF);
                       }
                     },
                     style: ElevatedButton.styleFrom(primary: contactStateColor),
@@ -126,16 +129,26 @@ class HomePage extends StatelessWidget {
                           onResult: (commandCode) {
                             switch (commandCode) {
                               case SpeechCommand.turnOnEngineCode:
-                                _starterBloc.add(StarterEvent.ENGINE_ON);
+                                {
+                                  _starterBloc.add(StarterEvent.ENGINE_ON);
+                                  _contactBloc.add(ContactEvent.CONTACT_ON);
+                                }
                                 break;
                               case SpeechCommand.turnOffEngineCode:
-                                _starterBloc.add(StarterEvent.ENGINE_OFF);
+                                {
+                                  _starterBloc.add(StarterEvent.ENGINE_OFF);
+                                  _contactBloc.add(ContactEvent.CONTACT_OFF);
+                                }
+
                                 break;
                               case SpeechCommand.turnOnContactCode:
                                 _contactBloc.add(ContactEvent.CONTACT_ON);
                                 break;
-                              case SpeechCommand.turnOnContactCode:
-                                _contactBloc.add(ContactEvent.CONTACT_ON);
+                              case SpeechCommand.turnOffContactCode:
+                                {
+                                  _contactBloc.add(ContactEvent.CONTACT_ON);
+                                  _starterBloc.add(StarterEvent.ENGINE_OFF);
+                                }
                                 break;
                               case SpeechCommand.turnOnEmergencyCode:
                                 _emergencyBloc
