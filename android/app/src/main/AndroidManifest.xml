@@ -1,7 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.motorcycle_remote">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    
    <application
-        android:label="motorcycle_remote"
+        android:label="Motorcycle Remote"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

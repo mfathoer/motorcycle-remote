@@ -1,15 +1,21 @@
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../util/speech_recognizer.dart';
+import '../../util/speech_command.dart';
 import '../bloc/starter_bloc.dart';
 import '../bloc/contact_bloc.dart';
 import '../bloc/emergency_bloc.dart';
+import '../bloc/microphone_bloc.dart';
 
 class HomePage extends StatelessWidget {
+  String text = "";
   @override
   Widget build(BuildContext context) {
     StarterBloc _starterBloc = BlocProvider.of<StarterBloc>(context);
     ContactBloc _contactBloc = BlocProvider.of<ContactBloc>(context);
     EmergencyBloc _emergencyBloc = BlocProvider.of<EmergencyBloc>(context);
+    MicrophoneBloc _microphoneBloc = BlocProvider.of<MicrophoneBloc>(context);
 
     return Scaffold(
       body: Column(
@@ -47,11 +53,10 @@ class HomePage extends StatelessWidget {
               BlocBuilder<ContactBloc, Color>(
                 builder: (context, contactStateColor) => ElevatedButton(
                     onPressed: () {
-                      if (contactStateColor == Colors.blue) {
+                      if (contactStateColor == Theme.of(context).primaryColor) {
                         _contactBloc.add(ContactEvent.CONTACT_ON);
                       } else {
                         _contactBloc.add(ContactEvent.CONTACT_OFF);
-                        // _starterBloc.add(StarterEvent.ENGINE_OFF);
                       }
                     },
                     style: ElevatedButton.styleFrom(primary: contactStateColor),
@@ -59,7 +64,8 @@ class HomePage extends StatelessWidget {
                         width: 128,
                         height: 40,
                         alignment: Alignment.center,
-                        child: Text((contactStateColor == Colors.blue)
+                        child: Text((contactStateColor ==
+                                Theme.of(context).primaryColor)
                             ? "PRE-START"
                             : "SHUT DOWN"))),
               ),
@@ -69,7 +75,8 @@ class HomePage extends StatelessWidget {
               BlocBuilder<EmergencyBloc, Color>(
                 builder: (context, emergencyStateColor) => ElevatedButton(
                     onPressed: () {
-                      if (emergencyStateColor == Colors.blue) {
+                      if (emergencyStateColor ==
+                          Theme.of(context).primaryColor) {
                         _emergencyBloc
                             .add(EmergencyModeEvent.EMERGENCY_MODE_ON);
                       } else {
@@ -83,20 +90,68 @@ class HomePage extends StatelessWidget {
                         width: 128,
                         height: 40,
                         alignment: Alignment.center,
-                        child: Text((emergencyStateColor == Colors.blue)
+                        child: Text((emergencyStateColor ==
+                                Theme.of(context).primaryColor)
                             ? "EMERGENCY MODE"
                             : "TURN OFF"))),
               )
             ],
           ),
           SizedBox(
-            height: 48,
-          ),
-          FloatingActionButton(child: Icon(Icons.mic), onPressed: () {}),
-          SizedBox(
-            height: 56,
-          ),
+            height: 175,
+          )
         ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BlocBuilder<MicrophoneBloc, bool>(
+        builder: (context, isListening) => AvatarGlow(
+          animate: isListening,
+          endRadius: 50,
+          glowColor: Theme.of(context).primaryColor,
+          child: FloatingActionButton(
+              child: Icon((isListening) ? Icons.mic : Icons.mic_none),
+              onPressed: () => SpeechRecognizer.toggleRecording(
+                  onResult: (text) => this.text = text,
+                  onListening: (isListening) {
+                    if (isListening) {
+                      _microphoneBloc.add(MicrophoneEvent.LISTENING);
+                    } else {
+                      _microphoneBloc.add(MicrophoneEvent.NOT_LISTENING);
+                      Future.delayed(Duration(seconds: 1), () {
+                        //extract voice command
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(content: Text(text)));
+                        SpeechCommand.extractText(
+                          rawText: text,
+                          onResult: (commandCode) {
+                            switch (commandCode) {
+                              case SpeechCommand.turnOnEngineCode:
+                                _starterBloc.add(StarterEvent.ENGINE_ON);
+                                break;
+                              case SpeechCommand.turnOffEngineCode:
+                                _starterBloc.add(StarterEvent.ENGINE_OFF);
+                                break;
+                              case SpeechCommand.turnOnContactCode:
+                                _contactBloc.add(ContactEvent.CONTACT_ON);
+                                break;
+                              case SpeechCommand.turnOnContactCode:
+                                _contactBloc.add(ContactEvent.CONTACT_ON);
+                                break;
+                              case SpeechCommand.turnOnEmergencyCode:
+                                _emergencyBloc
+                                    .add(EmergencyModeEvent.EMERGENCY_MODE_ON);
+                                break;
+                              case SpeechCommand.turnOffEmergencyCode:
+                                _emergencyBloc
+                                    .add(EmergencyModeEvent.EMERGENCY_MODE_OFF);
+                                break;
+                            }
+                          },
+                        );
+                      });
+                    }
+                  })),
+        ),
       ),
     );
   }

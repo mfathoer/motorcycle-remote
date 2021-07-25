@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motorcycle_remote/presentation/bloc/microphone_bloc.dart';
 
 import 'main_bloc_observer.dart';
 import 'presentation/bloc/contact_bloc.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
                 StarterBloc(apiService: _apiService)),
         BlocProvider<EmergencyBloc>(
             create: (BuildContext context) => EmergencyBloc(
-                initialState: primaryColor, apiService: _apiService))
+                initialState: primaryColor, apiService: _apiService)),
+        BlocProvider(create: (BuildContext context) => MicrophoneBloc(false)),
       ], child: HomePage()),
     );
   }
