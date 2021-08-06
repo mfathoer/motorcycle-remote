@@ -28,6 +28,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
   flutter_bloc: ^7.0.1
+  get_it: ^7.2.0
   http: ^0.13.3
   speech_to_text: ^4.2.2
 

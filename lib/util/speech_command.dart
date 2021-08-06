@@ -11,7 +11,6 @@ class SpeechCommand {
     rawText = rawText.toLowerCase();
     // turn on engine
     if (((rawText.contains("turn on") ||
-                rawText.contains("activate") ||
                 rawText.contains("start") ||
                 rawText.contains("star")) &&
             (rawText.contains("engine") || rawText.contains("machine"))) ||
@@ -19,9 +18,7 @@ class SpeechCommand {
       onResult(turnOnEngineCode);
     }
     //turn off engine
-    else if (((rawText.contains("turn off") ||
-                rawText.contains("deactivate") ||
-                rawText.contains("stop")) &&
+    else if (((rawText.contains("turn off") || rawText.contains("stop")) &&
             (rawText.contains("engine") || rawText.contains("machine"))) ||
         rawText.contains("engine off")) {
       onResult(turnOffEngineCode);
@@ -34,22 +31,18 @@ class SpeechCommand {
       onResult(turnOnContactCode);
     }
     // turn off contact
-    else if (((rawText.contains("turn off") ||
-                rawText.contains("deactivate") ||
-                rawText.contains("stop")) &&
+    else if (((rawText.contains("turn off") || rawText.contains("stop")) &&
             rawText.contains("contact")) ||
         rawText.contains("contact off")) {
       onResult(turnOffContactCode);
     }
     // turn on emergency mode
-    else if (((rawText.contains("activate") || rawText.contains("turn on")) &&
-            rawText.contains("emergency")) ||
+    else if (((rawText.contains("turn on")) && rawText.contains("emergency")) ||
         rawText.contains("emergency on")) {
       onResult(turnOnEmergencyCode);
     }
     // turn off emergency mode
-    else if (((rawText.contains("deactivate") ||
-                rawText.contains("turn off")) &&
+    else if (((rawText.contains("turn off")) &&
             rawText.contains("emergency")) ||
         rawText.contains("emergency off")) {
       onResult(turnOffEmergencyCode);

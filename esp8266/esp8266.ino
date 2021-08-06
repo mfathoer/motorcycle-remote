@@ -2,8 +2,8 @@
 #include <ESP8266WebServer.h>
 #include <ArduinoJson.h>
 
-const char* ssid = "NoteEight";  // Enter SSID here
-const char* password = "170501123";  //Enter Password here
+const char* ssid = "your ssid";  // Enter SSID here
+const char* password = "your password";  //Enter Password here
 
 ESP8266WebServer server(80);
 

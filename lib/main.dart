@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:motorcycle_remote/presentation/bloc/microphone_bloc.dart';
+import 'package:motorcycle_remote/injector.dart';
 
+import 'presentation/bloc/microphone_bloc.dart';
 import 'main_bloc_observer.dart';
 import 'presentation/bloc/contact_bloc.dart';
 import 'presentation/bloc/emergency_bloc.dart';
 import 'presentation/bloc/starter_bloc.dart';
 import 'presentation/view/home_page.dart';
-import '../../data/api_service.dart';
+import '../../data/repository.dart';
 
 void main() {
+  setupDependencies();
   Bloc.observer = MainBlocObserver();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final ApiService _apiService = ApiService();
+  final Repository _repository = getIt<Repository>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,13 @@ class MyApp extends StatelessWidget {
       home: MultiBlocProvider(providers: [
         BlocProvider<ContactBloc>(
             create: (BuildContext context) => ContactBloc(
-                initialState: primaryColor, apiService: _apiService)),
+                initialState: primaryColor, repository: _repository)),
         BlocProvider<StarterBloc>(
             create: (BuildContext context) =>
-                StarterBloc(apiService: _apiService)),
+                StarterBloc(repository: _repository)),
         BlocProvider<EmergencyBloc>(
             create: (BuildContext context) => EmergencyBloc(
-                initialState: primaryColor, apiService: _apiService)),
+                initialState: primaryColor, repository: _repository)),
         BlocProvider(create: (BuildContext context) => MicrophoneBloc(false)),
       ], child: HomePage()),
     );
