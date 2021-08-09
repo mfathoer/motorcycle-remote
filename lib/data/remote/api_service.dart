@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'responses/api_response.dart';
 
 class ApiService {
-  final String _baseUrl = "your ip address";
+  final String _baseUrl = "your module ip address";
 
   Future<ApiResponse?> turnOnEngine() async {
     try {
